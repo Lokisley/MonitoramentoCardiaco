@@ -65,5 +65,4 @@ public class FXMLDocumentController implements Initializable {
         textIp.setDisable(true);
         textPorta.setDisable(true);
     }
-    
 }
