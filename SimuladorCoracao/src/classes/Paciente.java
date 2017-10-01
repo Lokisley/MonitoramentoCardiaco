@@ -8,7 +8,6 @@ package classes;
 
 public class Paciente {
     
-    private String nome;
     private int bpm;
     private int pressaoMin;
     private int pressaoMax;
@@ -19,14 +18,12 @@ public class Paciente {
 
     /**
      * Construtor com todos os parametros inicializados
-     * @param nome
      * @param bpm
      * @param pressaoMin
      * @param pressaoMax
      * @param movimento 
      */
-    public Paciente(String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
-        this.nome = nome;
+    public Paciente(int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
         this.bpm = bpm;
         this.pressaoMin = pressaoMin;
         this.pressaoMax = pressaoMax;
@@ -42,25 +39,10 @@ public class Paciente {
      * @param movimento 
      */
     public void setAll (String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
-        this.nome = nome;
         this.bpm = bpm;
         this.pressaoMin = pressaoMin;
         this.pressaoMax = pressaoMax;
         this.movimento = movimento;
-    }
-
-    /**
-     * @return the nome
-     */
-    public String getNome() {
-        return nome;
-    }
-
-    /**
-     * @param nome the nome to set
-     */
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     /**
