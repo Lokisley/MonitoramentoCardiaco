@@ -13,12 +13,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
-import classes.Informacoes;
+import classes.Paciente;
 import javafx.scene.control.SpinnerValueFactory;
-/**
- *
- * @author Sammy Guergachi <sguergachi at gmail.com>
- */
+
 public class FXMLDocumentController implements Initializable {
     
     @FXML
@@ -31,11 +28,6 @@ public class FXMLDocumentController implements Initializable {
     private TextField textPressaoMax;
     @FXML
     private CheckBox checkMovimento;
-    @FXML
-    private Informacoes info = new Informacoes();
-    private String nome;
-    private int bpm, pressaoMin, pressaoMax;
-    private boolean movimento;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -45,16 +37,18 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     public void enviaDados(ActionEvent event) {
-        salvaDados();
+        Paciente info = salvaDados();
+        
     }
     
-    private void salvaDados() {
-        nome = textNome.getText();
-        bpm = spinnerBPM.getValue();
-        pressaoMin = Integer.parseInt(textPressaoMin.getText());
-        pressaoMax = Integer.parseInt(textPressaoMax.getText());
-        movimento = checkMovimento.isSelected();
-        info.setAll(nome, bpm, pressaoMin, pressaoMax, movimento);
+    private Paciente salvaDados() {
+        String nome = textNome.getText();
+        int bpm = spinnerBPM.getValue();
+        int pressaoMin = Integer.parseInt(textPressaoMin.getText());
+        int pressaoMax = Integer.parseInt(textPressaoMax.getText());
+        boolean movimento = checkMovimento.isSelected();
+        Paciente info = new Paciente(nome, bpm, pressaoMin, pressaoMax, movimento);
+        return info;
     }
     
 }

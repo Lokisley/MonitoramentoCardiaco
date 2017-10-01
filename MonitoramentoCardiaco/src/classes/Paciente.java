@@ -6,11 +6,7 @@
 
 package classes;
 
-/**
- * 
- * @author Sammy Guergachi <sguergachi at gmail.com>
- */
-public class Informacoes {
+public class Paciente {
     
     private String nome;
     private int bpm;
@@ -18,10 +14,18 @@ public class Informacoes {
     private int pressaoMax;
     private boolean movimento;
 
-    public Informacoes() {
+    public Paciente() {
     }
 
-    public Informacoes(String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
+    /**
+     * Construtor com todos os parametros inicializados
+     * @param nome
+     * @param bpm
+     * @param pressaoMin
+     * @param pressaoMax
+     * @param movimento 
+     */
+    public Paciente(String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
         this.nome = nome;
         this.bpm = bpm;
         this.pressaoMin = pressaoMin;
@@ -29,6 +33,14 @@ public class Informacoes {
         this.movimento = movimento;
     }
     
+    /**
+     * Define todos os parametros do objeto
+     * @param nome
+     * @param bpm
+     * @param pressaoMin
+     * @param pressaoMax
+     * @param movimento 
+     */
     public void setAll (String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
         this.nome = nome;
         this.bpm = bpm;
