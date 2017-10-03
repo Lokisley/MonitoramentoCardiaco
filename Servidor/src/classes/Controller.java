@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.PriorityBlockingQueue;
 
 
 /**
@@ -24,6 +25,7 @@ public class Controller {
     private static Controller controller;
     private ArrayList<User> userList = new ArrayList<User>();
     private LoggedUser logged = null;
+    private PriorityBlockingQueue patientList = new PriorityBlockingQueue();
     
     private Controller () {
         
@@ -96,52 +98,4 @@ public class Controller {
             return true;
         }
     }
-    
-    public String getMessage(String message){
-        if (!(message.startsWith("ioth"))){
-            return null;
-        }
-        else {
-            message = message.substring(4);
-            String protocol = message.substring(0, 2);
-            message = message.substring(2);
-            switch (protocol){
-                case "sc":
-                    protocolSC(message);
-                    break;
-                case "mc":
-                    break;
-                default:
-                    break;
-            }
-        }
-        return null;
-    }
-    
-    private String protocolSC(String message){
-        String protocol = message.substring(0, 2);
-        switch (protocol) {
-            case "oc":
-                break;
-            case "sd":
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-    
-    private String protocolMC(String message){
-        String protocol = message.substring(0, 2);
-        switch (protocol) {
-            case "lg":
-                break;
-            case "rg":
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-    
 }
