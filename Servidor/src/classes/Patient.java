@@ -8,6 +8,7 @@ package classes;
 
 public class Patient {
     
+    private int id;
     private int bpm;
     private String pressao;
     private boolean movimento;
@@ -17,10 +18,13 @@ public class Patient {
 
     /**
      * Construtor com todos os parametros inicializados
+     * @param id
      * @param bpm
-     * @param movimento 
+     * @param pressao
+     * @param movimento
      */
-    public Patient(int bpm, String pressao, boolean movimento) {
+    public Patient(int id, int bpm, String pressao, boolean movimento) {
+        this.id = id;
         this.bpm = bpm;
         this.pressao = pressao;
         this.movimento = movimento;
@@ -28,13 +32,23 @@ public class Patient {
     
     /**
      * Define todos os parametros do objeto
+     * @param id
      * @param bpm
+     * @param pressao
      * @param movimento 
      */
-    public void setAll (int bpm, String pressao, boolean movimento) {
+    public void setAll (int id, int bpm, String pressao, boolean movimento) {
+        this.id = id;
         this.bpm = bpm;
         this.pressao = pressao;
         this.movimento = movimento;
+    }
+    
+    /**
+     * @return the id
+     */
+    public int getId(){
+        return id;
     }
 
     /**

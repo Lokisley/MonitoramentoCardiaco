@@ -12,8 +12,8 @@ package classes;
  */
 public class User {
     
-    protected String login;
-    protected String password;
+    private String login;
+    private String password;
     
     private User (){
         

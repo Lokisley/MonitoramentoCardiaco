@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.PriorityBlockingQueue;
 
 
@@ -97,5 +98,15 @@ public class Controller {
             userList.add(user);
             return true;
         }
+    }
+    
+    public boolean verifyLogin(String login, String password){
+        Iterator i = userList.iterator();
+        User user;
+        while(i.hasNext()){
+            user = (User)i.next();
+            return (user.getLogin().equals(login) && user.getPassword().equals(password));
+        }
+        return false;
     }
 }
