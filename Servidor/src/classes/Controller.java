@@ -6,6 +6,7 @@
 
 package classes;
 
+import Exceptions.LoginRegisteredException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,7 +15,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.PriorityBlockingQueue;
 
 
 /**
@@ -24,9 +24,9 @@ import java.util.concurrent.PriorityBlockingQueue;
 public class Controller {
     
     private static Controller controller;
-    private ArrayList<User> userList = new ArrayList<User>();
-    private LoggedUser logged = null;
-    private PriorityBlockingQueue patientList = new PriorityBlockingQueue();
+    private ArrayList<User> userList = new ArrayList<>();
+    private ArrayList<LoggedUser> loggedUserList = new ArrayList<>();
+    private ArrayList<Patient> patientList = new ArrayList<>();
     
     private Controller () {
         
@@ -70,17 +70,12 @@ public class Controller {
     }
     
     /**
-     * Made the login of a user, and check if it is registered
+     * Inserts the object on the list of logged users
      * 
-     * @param login the nickname of the user 
-     * @param password the password
-     * @param ip the current ip the user is using
-     * @param gate the current gate the user is using
-     * @return true if the user is in the list of registered users, false if isnt
+     * @param logging the object of a user that is logging
      */
-    public boolean login (String login, String password, String ip, int gate) {
-        logged = new LoggedUser(login, password, ip, gate);
-        return userList.contains(logged);
+    public void loggingUser(LoggedUser logging) {
+        loggedUserList.add(logging);
     }
     
     /**
@@ -90,16 +85,26 @@ public class Controller {
      * @param password the password of the user
      * @return true if the user gets registered, false if the login is already in use
      */
-    public boolean registerUser (String login, String password) {
+    public boolean registerUser (String login, String password) throws LoginRegisteredException {
         User user = new User(login, password);
-        if (userList.contains(user)){
-            return false;
-        } else {
-            userList.add(user);
-            return true;
+        User checkUser;
+        Iterator i = userList.iterator();
+        while (i.hasNext()){
+            checkUser = (User)i.next();
+            if (checkUser.getLogin().equals(login)){
+                throw new LoginRegisteredException();
+            }
         }
+        userList.add(user);
+        return true;
     }
     
+    /**
+     * 
+     * @param login the nickname of the user
+     * @param password the password of the user
+     * @return true if the user is in the list of the registered users, false if isnt
+     */
     public boolean verifyLogin(String login, String password){
         Iterator i = userList.iterator();
         User user;

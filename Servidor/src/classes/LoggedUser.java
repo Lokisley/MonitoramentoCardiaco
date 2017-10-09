@@ -6,6 +6,8 @@
 
 package classes;
 
+import java.util.ArrayList;
+
 /**
  * 
  * @author Lokisley Oliveira <lokisley at hotmail.com>
@@ -14,6 +16,7 @@ public class LoggedUser extends User {
     
     private String ip;
     private int gate;
+    private ArrayList<Patient> patientList = new ArrayList<>();
     
     /**
      * @param login
@@ -37,8 +40,23 @@ public class LoggedUser extends User {
     /**
      * @return the ip
      */
-    public String ip(){
+    public String getIp(){
         return ip;
+    }
+    
+    /**
+     * @return the patient list 
+     */
+    public ArrayList<Patient> getPatientList() {
+        return patientList;
+    }
+    
+    /**
+     * Add a patient on the list
+     * @param patient 
+     */
+    public void addPatient (Patient patient) {
+        patientList.add(patient);
     }
 
 }

@@ -8,9 +8,11 @@ package classes;
 
 public class Paciente {
     
+    private int id;
     private int bpm;
     private int pressaoMin;
     private int pressaoMax;
+    private String nome;
     private boolean movimento;
 
     public Paciente() {
@@ -18,13 +20,17 @@ public class Paciente {
 
     /**
      * Construtor com todos os parametros inicializados
+     * @param id
      * @param bpm
+     * @param nome
      * @param pressaoMin
      * @param pressaoMax
      * @param movimento 
      */
-    public Paciente(int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
+    public Paciente(int id, int bpm, int pressaoMin, int pressaoMax, String nome, boolean movimento) {
+        this.id = id;
         this.bpm = bpm;
+        this.nome = nome;
         this.pressaoMin = pressaoMin;
         this.pressaoMax = pressaoMax;
         this.movimento = movimento;
@@ -38,11 +44,27 @@ public class Paciente {
      * @param pressaoMax
      * @param movimento 
      */
-    public void setAll (String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
+    public void setAll (int id, String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
+        this.id = id;
+        this.nome = nome;
         this.bpm = bpm;
         this.pressaoMin = pressaoMin;
         this.pressaoMax = pressaoMax;
         this.movimento = movimento;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @return the nome
+     */
+    public String getNome() {
+        return nome;
     }
 
     /**
@@ -53,24 +75,10 @@ public class Paciente {
     }
 
     /**
-     * @param bpm the bpm to set
-     */
-    public void setBpm(int bpm) {
-        this.bpm = bpm;
-    }
-
-    /**
      * @return the pressaoMin
      */
     public int getPressaoMin() {
         return pressaoMin;
-    }
-
-    /**
-     * @param pressaoMin the pressaoMin to set
-     */
-    public void setPressaoMin(int pressaoMin) {
-        this.pressaoMin = pressaoMin;
     }
 
     /**
@@ -81,23 +89,9 @@ public class Paciente {
     }
 
     /**
-     * @param pressaoMax the pressaoMax to set
-     */
-    public void setPressaoMax(int pressaoMax) {
-        this.pressaoMax = pressaoMax;
-    }
-
-    /**
      * @return the movimento
      */
     public boolean isMovimento() {
         return movimento;
-    }
-
-    /**
-     * @param movimento the movimento to set
-     */
-    public void setMovimento(boolean movimento) {
-        this.movimento = movimento;
     }
 }

@@ -17,9 +17,14 @@ import javafx.scene.control.TextField;
 import classes.Paciente;
 import java.io.IOException;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.layout.AnchorPane;
 
 public class FXMLDocumentController implements Initializable {
     
+    @FXML
+    private AnchorPane panelConexao;
+    @FXML
+    private AnchorPane panelInformacao;
     @FXML
     private Spinner<Integer> spinnerBPM = new Spinner<Integer>();
     @FXML
@@ -32,26 +37,26 @@ public class FXMLDocumentController implements Initializable {
     private TextField textIp;
     @FXML
     private TextField textPorta;
+    @FXML
+    private TextField textNome;
+    @FXML
+    private TextField textId;
     private Comunicacao comun = null;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         spinnerBPM.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 200, 80, 1));
-        // TODO
-    }
-    
-    @FXML
-    public void enviaDados(ActionEvent event) {
-        Paciente info = salvaDados();
-        
+        panelInformacao.setDisable(true);
     }
     
     private Paciente salvaDados() {
+        String nome = textNome.getText();
+        int id = Integer.parseInt(textId.getText());
         int bpm = spinnerBPM.getValue();
         int pressaoMin = Integer.parseInt(textPressaoMin.getText());
         int pressaoMax = Integer.parseInt(textPressaoMax.getText());
         boolean movimento = checkMovimento.isSelected();
-        Paciente info = new Paciente(bpm, pressaoMin, pressaoMax, movimento);
+        Paciente info = new Paciente(id, bpm, pressaoMin, pressaoMax, nome, movimento);
         return info;
     }
 
@@ -62,7 +67,7 @@ public class FXMLDocumentController implements Initializable {
         
         comun = new Comunicacao(ip, porta);
         
-        textIp.setDisable(true);
-        textPorta.setDisable(true);
+        panelConexao.setDisable(true);
+        panelInformacao.setDisable(false);
     }
 }

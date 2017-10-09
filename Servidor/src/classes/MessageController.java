@@ -7,6 +7,7 @@
 package classes;
 
 import Exceptions.LoginFailedException;
+import Exceptions.LoginRegisteredException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -31,17 +32,17 @@ public class MessageController {
         return mControl;
     }
         
-    public boolean getMessage(String message) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException{
+    public boolean getMessage(String message) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException{
         if (!(message.startsWith("ioth "))){
             return false;
         }
         else {
-            message = message.substring(4);
+            message = message.substring(5);
             if (message.startsWith("simc ")){
-                message = message.substring(4);
+                message = message.substring(5);
                 return protocolSimC(message);
             } else if (message.startsWith("monc ")) {
-                message = message.substring(4);
+                message = message.substring(5);
                 return protocolMonC(message);
             } else {
                 return false;
@@ -76,18 +77,30 @@ public class MessageController {
         return false;
     }
     
-    private boolean protocolMonC(String message) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException {
+    private boolean protocolMonC(String message) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException {
         if (message.startsWith("login ")) {
-            message = message.substring(0,5);
+            message = message.substring(0,6);
             return protocolLogin(message);
-        } else if (message.startsWith("regis ")) {
-            message = message.substring(0,5);
+        } else if (message.startsWith("register ")) {
+            message = message.substring(0,9);
             return protocolRegis(message);
+        } else if (message.startsWith("userlist ")){
+            message = message.substring(0, 9);
+            return protocolUserlist(message);
         } else {
             return false;
         }
     }
     
+    /**
+     * 
+     * @param message
+     * @return true if the user was logged successfully, false if some error has occurred
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws ClassNotFoundException
+     * @throws LoginFailedException if the logging has failed=
+     */
     private boolean protocolLogin(String message) throws IOException, FileNotFoundException, ClassNotFoundException, LoginFailedException{
         String ip = message.substring(message.indexOf(","));
         message = message.substring(message.indexOf(","));
@@ -103,8 +116,8 @@ public class MessageController {
         
         if (message.equals("end")){
             LoggedUser loggedUser = new LoggedUser(login, password, ip, gate);
-            User user = new User(login, password);
-            if (controller.getUserList().contains(user)){
+            if (controller.verifyLogin(login, password)) {
+                controller.loggingUser(loggedUser);
                 return true;
             } else {
                 throw new LoginFailedException();
@@ -114,7 +127,27 @@ public class MessageController {
         }
     }
     
-    private boolean protocolRegis(String message){
+    /**
+     * 
+     * @param message 
+     * @return true if the user is successfully registered, false if some error has ocured  during the register
+     * @throws LoginRegisteredException if the nickname of the login is already in use
+     */
+    private boolean protocolRegis(String message) throws LoginRegisteredException{
+        String login = message.substring(message.indexOf(","));
+        message = message.substring(message.indexOf(","));
+        
+        String password = message.substring(message.indexOf(" "));
+        message = message.substring(message.indexOf(" "));
+        
+        if (message.equals("end")){
+            return controller.registerUser(login, password);
+        }
+        return false;
+    }
+    
+    private boolean protocolUserlist(String message) {
+        
         return false;
     }
 }
