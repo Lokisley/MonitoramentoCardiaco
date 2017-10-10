@@ -10,8 +10,7 @@ public class Paciente {
     
     private int id;
     private int bpm;
-    private int pressaoMin;
-    private int pressaoMax;
+    private String pressao;
     private String nome;
     private boolean movimento;
 
@@ -31,13 +30,13 @@ public class Paciente {
         this.id = id;
         this.bpm = bpm;
         this.nome = nome;
-        this.pressaoMin = pressaoMin;
-        this.pressaoMax = pressaoMax;
+        this.pressao = (pressaoMin + "/" + pressaoMax);
         this.movimento = movimento;
     }
     
     /**
      * Define todos os parametros do objeto
+     * @param id
      * @param nome
      * @param bpm
      * @param pressaoMin
@@ -48,8 +47,7 @@ public class Paciente {
         this.id = id;
         this.nome = nome;
         this.bpm = bpm;
-        this.pressaoMin = pressaoMin;
-        this.pressaoMax = pressaoMax;
+        this.pressao = (pressaoMin + "/" + pressaoMax);
         this.movimento = movimento;
     }
 
@@ -73,19 +71,12 @@ public class Paciente {
     public int getBpm() {
         return bpm;
     }
-
+    
     /**
-     * @return the pressaoMin
+     * @return the pressao
      */
-    public int getPressaoMin() {
-        return pressaoMin;
-    }
-
-    /**
-     * @return the pressaoMax
-     */
-    public int getPressaoMax() {
-        return pressaoMax;
+    public String getPressao(){
+        return pressao;
     }
 
     /**

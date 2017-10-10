@@ -6,10 +6,14 @@
 
 package classes;
 
+import Exceptions.AddPatientListException;
 import Exceptions.LoginFailedException;
 import Exceptions.LoginRegisteredException;
+import Exceptions.PatientNotFoundException;
+import Exceptions.ProtocolSyntaxException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * 
@@ -32,7 +36,7 @@ public class MessageController {
         return mControl;
     }
         
-    public boolean getMessage(String message) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException{
+    public boolean getMessage(String message) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException, AddPatientListException, ProtocolSyntaxException, PatientNotFoundException{
         if (!(message.startsWith("ioth "))){
             return false;
         }
@@ -45,14 +49,14 @@ public class MessageController {
                 message = message.substring(5);
                 return protocolMonC(message);
             } else {
-                return false;
+                throw new ProtocolSyntaxException();
             }
         }
     }
     
-    private boolean protocolSimC(String message){
+    private boolean protocolSimC(String message) throws ProtocolSyntaxException, PatientNotFoundException{
         if (!message.startsWith("senddata ")) {
-            return false;
+            throw new ProtocolSyntaxException();
         } else {
             message = message.substring(message.indexOf(" "));
             
@@ -69,15 +73,27 @@ public class MessageController {
             message = message.substring(message.indexOf(" "));
             
             if (!message.equals("end")){
-                return false;
+                throw new ProtocolSyntaxException();
             } else {
                 Patient patient = new Patient (id, bpm, pressure, movement);
+                return controller.addPatient(patient);
             }
         }
-        return false;
     }
     
-    private boolean protocolMonC(String message) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException {
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws ClassNotFoundException
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws LoginFailedException
+     * @throws LoginRegisteredException
+     * @throws AddPatientListException
+     * @throws ProtocolSyntaxException 
+     */
+    private boolean protocolMonC(String message) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException, AddPatientListException, ProtocolSyntaxException {
         if (message.startsWith("login ")) {
             message = message.substring(0,6);
             return protocolLogin(message);
@@ -88,20 +104,19 @@ public class MessageController {
             message = message.substring(0, 9);
             return protocolUserlist(message);
         } else {
-            return false;
+            throw new ProtocolSyntaxException();
         }
     }
     
     /**
      * 
      * @param message
-     * @return true if the user was logged successfully, false if some error has occurred
      * @throws IOException
      * @throws FileNotFoundException
      * @throws ClassNotFoundException
-     * @throws LoginFailedException if the logging has failed=
+     * @throws LoginFailedException if the logging has failed
      */
-    private boolean protocolLogin(String message) throws IOException, FileNotFoundException, ClassNotFoundException, LoginFailedException{
+    private boolean protocolLogin(String message) throws IOException, FileNotFoundException, ClassNotFoundException, LoginFailedException, ProtocolSyntaxException{
         String ip = message.substring(message.indexOf(","));
         message = message.substring(message.indexOf(","));
         
@@ -117,13 +132,12 @@ public class MessageController {
         if (message.equals("end")){
             LoggedUser loggedUser = new LoggedUser(login, password, ip, gate);
             if (controller.verifyLogin(login, password)) {
-                controller.loggingUser(loggedUser);
-                return true;
+                return controller.loggingUser(loggedUser);
             } else {
                 throw new LoginFailedException();
             }
         } else {
-            return false;
+            throw new ProtocolSyntaxException();
         }
     }
     
@@ -133,7 +147,7 @@ public class MessageController {
      * @return true if the user is successfully registered, false if some error has ocured  during the register
      * @throws LoginRegisteredException if the nickname of the login is already in use
      */
-    private boolean protocolRegis(String message) throws LoginRegisteredException{
+    private boolean protocolRegis(String message) throws LoginRegisteredException, ProtocolSyntaxException{
         String login = message.substring(message.indexOf(","));
         message = message.substring(message.indexOf(","));
         
@@ -142,12 +156,47 @@ public class MessageController {
         
         if (message.equals("end")){
             return controller.registerUser(login, password);
+        } else {
+            throw new ProtocolSyntaxException();
         }
-        return false;
     }
     
-    private boolean protocolUserlist(String message) {
-        
-        return false;
+    /**
+     * 
+     * @param message
+     * @throws AddPatientListException if a error has ocurred during the changing of the patient list to the doctor
+     * @throws ProtocolSyntaxException if a erorr has ocurred in the syntax of the protocol
+     */
+    private boolean protocolUserlist(String message) throws AddPatientListException, ProtocolSyntaxException{
+        if (message.startsWith("ALL")) {
+            message = message.substring(message.indexOf(" "));
+            String login = message.substring(message.indexOf(" "));
+            message = message.substring(message.indexOf(" "));
+            
+            if (message.equals("end")) {
+                controller.addPatientToDoctor(controller.getPatientList(), login);
+            } else{
+                throw new ProtocolSyntaxException();
+            }
+        } else {
+            message = message.substring(message.indexOf("<"));
+            
+            ArrayList patientsId = new ArrayList();
+            while (!message.startsWith(">")){
+                patientsId.add(Integer.parseInt(message.substring(message.indexOf(","))));
+                message = message.substring(message.indexOf(","));
+            }
+            message = message.substring(message.indexOf(" "));
+            
+            String login = message.substring(message.indexOf(" "));
+            message = message.substring(message.indexOf(" "));
+            
+            if (message.equals("end")){
+                controller.addPatientToDoctor(patientsId, login);
+            } else {
+                throw new ProtocolSyntaxException();
+            }
+        }
+        throw new ProtocolSyntaxException();
     }
 }

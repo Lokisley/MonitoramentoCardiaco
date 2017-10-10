@@ -6,7 +6,9 @@
 
 package classes;
 
+import Exceptions.AddPatientListException;
 import Exceptions.LoginRegisteredException;
+import Exceptions.PatientNotFoundException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,11 +27,10 @@ public class Controller {
     
     private static Controller controller;
     private ArrayList<User> userList = new ArrayList<>();
-    private ArrayList<LoggedUser> loggedUserList = new ArrayList<>();
-    private ArrayList<Patient> patientList = new ArrayList<>();
+    private final ArrayList<LoggedUser> loggedUserList = new ArrayList<>();
+    private final ArrayList<Patient> patientList = new ArrayList<>();
     
-    private Controller () {
-        
+    private Controller () {   
     }
     
     public static Controller getInstance () {
@@ -37,6 +38,10 @@ public class Controller {
             controller = new Controller();
         }
         return controller;
+    }
+    
+    public ArrayList getPatientList (){
+        return patientList;
     }
     
     /**
@@ -74,8 +79,8 @@ public class Controller {
      * 
      * @param logging the object of a user that is logging
      */
-    public void loggingUser(LoggedUser logging) {
-        loggedUserList.add(logging);
+    public boolean loggingUser(LoggedUser logging) {
+        return loggedUserList.add(logging);
     }
     
     /**
@@ -84,6 +89,7 @@ public class Controller {
      * @param login the nickname of the user
      * @param password the password of the user
      * @return true if the user gets registered, false if the login is already in use
+     * @throws Exceptions.LoginRegisteredException
      */
     public boolean registerUser (String login, String password) throws LoginRegisteredException {
         User user = new User(login, password);
@@ -113,5 +119,46 @@ public class Controller {
             return (user.getLogin().equals(login) && user.getPassword().equals(password));
         }
         return false;
+    }
+    
+    public void addPatientToDoctor (ArrayList patientIdList, String login) throws AddPatientListException {
+        Iterator iId = patientIdList.iterator();
+        Iterator iPatientRegistered = this.patientList.iterator();
+        Iterator iUser = loggedUserList.iterator();
+        ArrayList<Patient> patientUserList = new ArrayList();
+        LoggedUser user;
+        Patient patient;
+        int id;
+        while (iId.hasNext()){
+            id = (Integer)iId.next();
+            while(iPatientRegistered.hasNext()){
+                patient = (Patient)iPatientRegistered.next();
+                if (id == patient.getId()) {
+                    patientUserList.add(patient);
+                }
+            }
+        }
+        while (iUser.hasNext()) {
+            user = (LoggedUser)iUser.next();
+            if (user.getLogin().equals(login)){
+                user.setPatientList(patientUserList);
+                return;
+            }
+        }
+        throw new AddPatientListException();
+    }
+    
+    public boolean addPatient (Patient patient) throws PatientNotFoundException{
+        Iterator i = patientList.iterator();
+        Patient p;
+        while (i.hasNext()){
+            p = (Patient)i.next();
+            if (p.getId() == patient.getId()){
+                patientList.remove(p);
+                patientList.add(patient);
+                return true;
+            }
+        }
+        throw new PatientNotFoundException ();
     }
 }

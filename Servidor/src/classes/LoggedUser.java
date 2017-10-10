@@ -58,5 +58,9 @@ public class LoggedUser extends User {
     public void addPatient (Patient patient) {
         patientList.add(patient);
     }
+    
+    public void setPatientList(ArrayList patientList){
+        this.patientList = patientList;
+    }
 
 }
