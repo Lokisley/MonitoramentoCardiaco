@@ -9,6 +9,7 @@ package classes;
 public class Patient {
     
     private int id;
+    private String nome;
     private int bpm;
     private String pressao;
     private boolean movimento;
@@ -23,9 +24,10 @@ public class Patient {
      * @param pressao
      * @param movimento
      */
-    public Patient(int id, int bpm, String pressao, boolean movimento) {
+    public Patient(int id, int bpm,String nome, String pressao, boolean movimento) {
         this.id = id;
         this.bpm = bpm;
+        this.nome = nome;
         this.pressao = pressao;
         this.movimento = movimento;
     }
@@ -37,9 +39,10 @@ public class Patient {
      * @param pressao
      * @param movimento 
      */
-    public void setAll (int id, int bpm, String pressao, boolean movimento) {
+    public void setAll (int id, int bpm,String nome, String pressao, boolean movimento) {
         this.id = id;
         this.bpm = bpm;
+        this.nome = nome;
         this.pressao = pressao;
         this.movimento = movimento;
     }
@@ -56,6 +59,13 @@ public class Patient {
      */
     public int getBpm() {
         return bpm;
+    }
+    
+    /**
+     * @return the nome
+     */
+    public String getNome (){
+        return nome;
     }
 
     /**

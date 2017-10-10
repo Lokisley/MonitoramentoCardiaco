@@ -14,34 +14,14 @@ import java.util.ArrayList;
  */
 public class LoggedUser extends User {
     
-    private String ip;
-    private int gate;
     private ArrayList<Patient> patientList = new ArrayList<>();
     
     /**
      * @param login
      * @param password
-     * @param ip
-     * @param gate 
      */
-    public LoggedUser(String login, String password, String ip, int gate){
+    public LoggedUser(String login, String password){
         super(login, password);
-        this.ip = ip;
-        this.gate = gate;
-    }
-
-    /**
-     * @return the gate
-     */
-    public int getGate() {
-        return gate;
-    }
-    
-    /**
-     * @return the ip
-     */
-    public String getIp(){
-        return ip;
     }
     
     /**

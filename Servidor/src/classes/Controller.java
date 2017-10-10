@@ -8,7 +8,6 @@ package classes;
 
 import Exceptions.AddPatientListException;
 import Exceptions.LoginRegisteredException;
-import Exceptions.PatientNotFoundException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -40,6 +39,9 @@ public class Controller {
         return controller;
     }
     
+    /**
+     * @return the patient list
+     */
     public ArrayList getPatientList (){
         return patientList;
     }
@@ -121,7 +123,14 @@ public class Controller {
         return false;
     }
     
-    public void addPatientToDoctor (ArrayList patientIdList, String login) throws AddPatientListException {
+    /**
+     * Add patients in the object patientList of the logged doctor 
+     * @param patientIdList - the patient list to be added
+     * @param login - the nickname of the doctor to receive the list of patients
+     * @return
+     * @throws AddPatientListException 
+     */
+    public ArrayList<Patient> addPatientToDoctor (ArrayList patientIdList, String login) throws AddPatientListException {
         Iterator iId = patientIdList.iterator();
         Iterator iPatientRegistered = this.patientList.iterator();
         Iterator iUser = loggedUserList.iterator();
@@ -142,13 +151,18 @@ public class Controller {
             user = (LoggedUser)iUser.next();
             if (user.getLogin().equals(login)){
                 user.setPatientList(patientUserList);
-                return;
+                return user.getPatientList();
             }
         }
         throw new AddPatientListException();
     }
     
-    public boolean addPatient (Patient patient) throws PatientNotFoundException{
+    /**
+     * Add a patient on the list or refresh his informations if he is already on the list
+     * @param patient
+     * @return 
+     */
+    public boolean addPatient (Patient patient){
         Iterator i = patientList.iterator();
         Patient p;
         while (i.hasNext()){
@@ -159,6 +173,6 @@ public class Controller {
                 return true;
             }
         }
-        throw new PatientNotFoundException ();
+        return patientList.add(patient);
     }
 }

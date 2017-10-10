@@ -9,11 +9,11 @@ package classes;
 import Exceptions.AddPatientListException;
 import Exceptions.LoginFailedException;
 import Exceptions.LoginRegisteredException;
-import Exceptions.PatientNotFoundException;
 import Exceptions.ProtocolSyntaxException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * 
@@ -29,14 +29,26 @@ public class MessageController {
     
     }
     
-    public MessageController getInstance(){
+    public static MessageController getInstance(){
         if (mControl==null){
             mControl = new MessageController();
         }
         return mControl;
     }
-        
-    public boolean getMessage(String message) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException, AddPatientListException, ProtocolSyntaxException, PatientNotFoundException{
+    
+    /**
+     * @param message
+     * @param thread
+     * @return
+     * @throws ClassNotFoundException
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws LoginFailedException
+     * @throws LoginRegisteredException
+     * @throws AddPatientListException
+     * @throws ProtocolSyntaxException 
+     */
+    public boolean getMessage(String message, MyThread thread) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException, AddPatientListException, ProtocolSyntaxException{
         if (!(message.startsWith("ioth "))){
             return false;
         }
@@ -47,20 +59,28 @@ public class MessageController {
                 return protocolSimC(message);
             } else if (message.startsWith("monc ")) {
                 message = message.substring(5);
-                return protocolMonC(message);
+                return protocolMonC(message, thread);
             } else {
                 throw new ProtocolSyntaxException();
             }
         }
     }
     
-    private boolean protocolSimC(String message) throws ProtocolSyntaxException, PatientNotFoundException{
+    /**
+     * @param message
+     * @return true if the information of the pacient was successfully updated, false if it wasnt
+     * @throws ProtocolSyntaxException
+     */
+    private boolean protocolSimC(String message) throws ProtocolSyntaxException{
         if (!message.startsWith("senddata ")) {
             throw new ProtocolSyntaxException();
         } else {
             message = message.substring(message.indexOf(" "));
             
             int id = Integer.parseInt(message.substring(0, message.indexOf(",")));
+            message = message.substring(message.indexOf(","));
+            
+            String nome = message.substring(0, message.indexOf(","));
             message = message.substring(message.indexOf(","));
             
             int bpm = Integer.parseInt(message.substring(0, message.indexOf(",")));
@@ -75,7 +95,7 @@ public class MessageController {
             if (!message.equals("end")){
                 throw new ProtocolSyntaxException();
             } else {
-                Patient patient = new Patient (id, bpm, pressure, movement);
+                Patient patient = new Patient(id, bpm, nome, pressure, movement);
                 return controller.addPatient(patient);
             }
         }
@@ -93,7 +113,7 @@ public class MessageController {
      * @throws AddPatientListException
      * @throws ProtocolSyntaxException 
      */
-    private boolean protocolMonC(String message) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException, AddPatientListException, ProtocolSyntaxException {
+    private boolean protocolMonC(String message, MyThread thread) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException, AddPatientListException, ProtocolSyntaxException {
         if (message.startsWith("login ")) {
             message = message.substring(0,6);
             return protocolLogin(message);
@@ -102,7 +122,7 @@ public class MessageController {
             return protocolRegis(message);
         } else if (message.startsWith("userlist ")){
             message = message.substring(0, 9);
-            return protocolUserlist(message);
+            return protocolUserlist(message, thread);
         } else {
             throw new ProtocolSyntaxException();
         }
@@ -117,12 +137,6 @@ public class MessageController {
      * @throws LoginFailedException if the logging has failed
      */
     private boolean protocolLogin(String message) throws IOException, FileNotFoundException, ClassNotFoundException, LoginFailedException, ProtocolSyntaxException{
-        String ip = message.substring(message.indexOf(","));
-        message = message.substring(message.indexOf(","));
-        
-        int gate = Integer.parseInt(message.substring(message.indexOf(",")));
-        message = message.substring(message.indexOf(","));
-        
         String login = message.substring(message.indexOf(","));
         message = message.substring(message.indexOf(","));
         
@@ -130,7 +144,7 @@ public class MessageController {
         message = message.substring(message.indexOf(" "));
         
         if (message.equals("end")){
-            LoggedUser loggedUser = new LoggedUser(login, password, ip, gate);
+            LoggedUser loggedUser = new LoggedUser(login, password);
             if (controller.verifyLogin(login, password)) {
                 return controller.loggingUser(loggedUser);
             } else {
@@ -167,7 +181,7 @@ public class MessageController {
      * @throws AddPatientListException if a error has ocurred during the changing of the patient list to the doctor
      * @throws ProtocolSyntaxException if a erorr has ocurred in the syntax of the protocol
      */
-    private boolean protocolUserlist(String message) throws AddPatientListException, ProtocolSyntaxException{
+    private boolean protocolUserlist(String message, MyThread thread) throws AddPatientListException, ProtocolSyntaxException, IOException{
         if (message.startsWith("ALL")) {
             message = message.substring(message.indexOf(" "));
             String login = message.substring(message.indexOf(" "));
@@ -192,7 +206,20 @@ public class MessageController {
             message = message.substring(message.indexOf(" "));
             
             if (message.equals("end")){
-                controller.addPatientToDoctor(patientsId, login);
+                ArrayList<Patient> patientList = controller.addPatientToDoctor(patientsId, login);
+                Iterator i = patientList.iterator();
+                String stringPatientList = "<";
+                while (i.hasNext()){
+                    Patient p = (Patient)i.next();
+                    stringPatientList = stringPatientList.concat(
+                            "(" + p.getId() + 
+                            "," + p.getNome() +
+                            "," + p.getPressao() +
+                            "," + p.isMovimento() + ")");
+                }
+                stringPatientList = stringPatientList.concat(">");
+                
+                thread.sendMessage("ioth userlist" + stringPatientList + " end");
             } else {
                 throw new ProtocolSyntaxException();
             }
