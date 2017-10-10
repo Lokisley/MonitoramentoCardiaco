@@ -75,22 +75,22 @@ public class MessageController {
         if (!message.startsWith("senddata ")) {
             throw new ProtocolSyntaxException();
         } else {
-            message = message.substring(message.indexOf(" "));
+            message = message.substring(9);
             
             int id = Integer.parseInt(message.substring(0, message.indexOf(",")));
-            message = message.substring(message.indexOf(","));
+            message = message.substring(message.indexOf(",") + 1);
             
             String nome = message.substring(0, message.indexOf(","));
-            message = message.substring(message.indexOf(","));
+            message = message.substring(message.indexOf(",") + 1);
             
             int bpm = Integer.parseInt(message.substring(0, message.indexOf(",")));
-            message = message.substring(message.indexOf(","));
+            message = message.substring(message.indexOf(",") + 1);
             
             String pressure = message.substring(0, message.indexOf(","));
-            message = message.substring(message.indexOf(","));
+            message = message.substring(message.indexOf(",") + 1);
             
             boolean movement = Boolean.parseBoolean(message.substring(0, message.indexOf(" ")));
-            message = message.substring(message.indexOf(" "));
+            message = message.substring(message.indexOf(" ") + 1);
             
             if (!message.equals("end")){
                 throw new ProtocolSyntaxException();
@@ -138,10 +138,10 @@ public class MessageController {
      */
     private boolean protocolLogin(String message) throws IOException, FileNotFoundException, ClassNotFoundException, LoginFailedException, ProtocolSyntaxException{
         String login = message.substring(message.indexOf(","));
-        message = message.substring(message.indexOf(","));
+        message = message.substring(message.indexOf(",") + 1);
         
         String password = message.substring(message.indexOf(","));
-        message = message.substring(message.indexOf(" "));
+        message = message.substring(message.indexOf(" ") + 1);
         
         if (message.equals("end")){
             LoggedUser loggedUser = new LoggedUser(login, password);
@@ -163,10 +163,10 @@ public class MessageController {
      */
     private boolean protocolRegis(String message) throws LoginRegisteredException, ProtocolSyntaxException{
         String login = message.substring(message.indexOf(","));
-        message = message.substring(message.indexOf(","));
+        message = message.substring(message.indexOf(",") + 1);
         
         String password = message.substring(message.indexOf(" "));
-        message = message.substring(message.indexOf(" "));
+        message = message.substring(message.indexOf(" ") + 1);
         
         if (message.equals("end")){
             return controller.registerUser(login, password);
@@ -183,9 +183,9 @@ public class MessageController {
      */
     private boolean protocolUserlist(String message, MyThread thread) throws AddPatientListException, ProtocolSyntaxException, IOException{
         if (message.startsWith("ALL")) {
-            message = message.substring(message.indexOf(" "));
+            message = message.substring(message.indexOf(" ") + 1);
             String login = message.substring(message.indexOf(" "));
-            message = message.substring(message.indexOf(" "));
+            message = message.substring(message.indexOf(" ") + 1);
             
             if (message.equals("end")) {
                 controller.addPatientToDoctor(controller.getPatientList(), login);
@@ -198,12 +198,12 @@ public class MessageController {
             ArrayList patientsId = new ArrayList();
             while (!message.startsWith(">")){
                 patientsId.add(Integer.parseInt(message.substring(message.indexOf(","))));
-                message = message.substring(message.indexOf(","));
+                message = message.substring(message.indexOf(",") + 1);
             }
-            message = message.substring(message.indexOf(" "));
+            message = message.substring(message.indexOf(" ") + 1);
             
             String login = message.substring(message.indexOf(" "));
-            message = message.substring(message.indexOf(" "));
+            message = message.substring(message.indexOf(" ") + 1);
             
             if (message.equals("end")){
                 ArrayList<Patient> patientList = controller.addPatientToDoctor(patientsId, login);

@@ -26,11 +26,11 @@ public class Paciente {
      * @param pressaoMax
      * @param movimento 
      */
-    public Paciente(int id, int bpm, int pressaoMin, int pressaoMax, String nome, boolean movimento) {
+    public Paciente(int id, int bpm, int pressaoMax, int pressaoMin, String nome, boolean movimento) {
         this.id = id;
         this.bpm = bpm;
         this.nome = nome;
-        this.pressao = (pressaoMin + "/" + pressaoMax);
+        this.pressao = (pressaoMax + "/" + pressaoMin);
         this.movimento = movimento;
     }
     
