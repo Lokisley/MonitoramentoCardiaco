@@ -1,20 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monitoramentocardiaco.FXMLDocumentController">
    <children>
       <ScrollPane layoutX="25.0" layoutY="226.0" prefHeight="300.0" prefWidth="450.0" vbarPolicy="ALWAYS">
          <content>
-            <ListView fx:id="listPatients" prefHeight="300.0" prefWidth="450.0" />
+            <ListView fx:id="listPatient" prefHeight="300.0" prefWidth="450.0" />
          </content>
       </ScrollPane>
-      <Pane fx:id="paneSelectedPatient" layoutX="24.0" layoutY="23.0" prefHeight="178.0" prefWidth="271.0" />
-      <Button fx:id="buttonEditList" layoutX="321.0" layoutY="176.0" mnemonicParsing="false" text="Editar Lista de Pacientes" />
-      <Pane fx:id="paneUserInformation" layoutX="321.0" layoutY="23.0" prefHeight="68.0" prefWidth="144.0" />
+      <Pane fx:id="paneSelectedPatient" layoutX="24.0" layoutY="23.0" prefHeight="178.0" prefWidth="271.0">
+         <children>
+            <Label fx:id="labelNome" layoutX="14.0" layoutY="21.0" text="Nome:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelBpm" layoutX="14.0" layoutY="59.0" text="BPM:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelPressao" layoutX="14.0" layoutY="100.0" text="Pressão:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelMovimento" layoutX="15.0" layoutY="138.0" text="Em Movimento:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children></Pane>
+      <Button fx:id="buttonInicio" layoutX="321.0" layoutY="176.0" mnemonicParsing="false" onAction="#iniciaEnvio" prefHeight="25.0" prefWidth="144.0" text="Iniciar Transmissão" />
+      <Pane fx:id="paneConexao" layoutX="321.0" layoutY="23.0" prefHeight="116.0" prefWidth="144.0">
+         <children>
+            <Label layoutX="8.0" layoutY="6.0" text="IP:" />
+            <TextField fx:id="textIp" layoutX="40.0" layoutY="2.0" prefHeight="25.0" prefWidth="90.0" />
+            <Label layoutX="7.0" layoutY="41.0" text="Porta:" />
+            <TextField fx:id="textPorta" layoutX="40.0" layoutY="37.0" prefHeight="25.0" prefWidth="90.0" />
+            <Button fx:id="buttonConecta" layoutX="40.0" layoutY="77.0" mnemonicParsing="false" onAction="#conectaServidor" prefHeight="25.0" prefWidth="90.0" text="Conectar" />
+         </children></Pane>
    </children>
 </AnchorPane>

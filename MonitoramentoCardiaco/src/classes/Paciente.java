@@ -10,8 +10,8 @@ public class Paciente {
     
     private String nome;
     private int bpm;
-    private int pressaoMin;
-    private int pressaoMax;
+    private int id;
+    private String pressao;
     private boolean movimento;
 
     public Paciente() {
@@ -19,33 +19,51 @@ public class Paciente {
 
     /**
      * Construtor com todos os parametros inicializados
+     * @param id
      * @param nome
      * @param bpm
      * @param pressaoMin
      * @param pressaoMax
      * @param movimento 
      */
-    public Paciente(String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
+    public Paciente(int id, String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
+        this.id = id;
         this.nome = nome;
         this.bpm = bpm;
-        this.pressaoMin = pressaoMin;
-        this.pressaoMax = pressaoMax;
+        this.pressao = pressaoMax + "/" + pressaoMin;
+        this.movimento = movimento;
+    }
+    
+    /**
+     * Construtor com todos os parametros inicializados
+     * @param id
+     * @param nome
+     * @param bpm
+     * @param pressao
+     * @param movimento 
+     */
+    public Paciente(int id, String nome, int bpm, String pressao, boolean movimento) {
+        this.id = id;
+        this.nome = nome;
+        this.bpm = bpm;
+        this.pressao = pressao;
         this.movimento = movimento;
     }
     
     /**
      * Define todos os parametros do objeto
+     * @param id
      * @param nome
      * @param bpm
      * @param pressaoMin
      * @param pressaoMax
      * @param movimento 
      */
-    public void setAll (String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
+    public void setAll (int id, String nome, int bpm, int pressaoMin, int pressaoMax, boolean movimento) {
+        this.id = id;
         this.nome = nome;
         this.bpm = bpm;
-        this.pressaoMin = pressaoMin;
-        this.pressaoMax = pressaoMax;
+        this.setPressao(pressaoMax + "/" + pressaoMin);
         this.movimento = movimento;
     }
 
@@ -76,35 +94,7 @@ public class Paciente {
     public void setBpm(int bpm) {
         this.bpm = bpm;
     }
-
-    /**
-     * @return the pressaoMin
-     */
-    public int getPressaoMin() {
-        return pressaoMin;
-    }
-
-    /**
-     * @param pressaoMin the pressaoMin to set
-     */
-    public void setPressaoMin(int pressaoMin) {
-        this.pressaoMin = pressaoMin;
-    }
-
-    /**
-     * @return the pressaoMax
-     */
-    public int getPressaoMax() {
-        return pressaoMax;
-    }
-
-    /**
-     * @param pressaoMax the pressaoMax to set
-     */
-    public void setPressaoMax(int pressaoMax) {
-        this.pressaoMax = pressaoMax;
-    }
-
+    
     /**
      * @return the movimento
      */
@@ -117,5 +107,19 @@ public class Paciente {
      */
     public void setMovimento(boolean movimento) {
         this.movimento = movimento;
+    }
+    
+    /**
+     * @return the pressao
+     */
+    public String getPressao() {
+        return pressao;
+    }
+
+    /**
+     * @param pressao the pressao to set
+     */
+    public void setPressao(String pressao) {
+        this.pressao = pressao;
     }
 }

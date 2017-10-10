@@ -193,7 +193,7 @@ public class MessageController {
                 throw new ProtocolSyntaxException();
             }
         } else {
-            message = message.substring(message.indexOf("<"));
+            message = message.substring(message.indexOf("<") + 1);
             
             ArrayList patientsId = new ArrayList();
             while (!message.startsWith(">")){
@@ -214,6 +214,7 @@ public class MessageController {
                     stringPatientList = stringPatientList.concat(
                             "(" + p.getId() + 
                             "," + p.getNome() +
+                            "," + p.getBpm() +
                             "," + p.getPressao() +
                             "," + p.isMovimento() + ")");
                 }
