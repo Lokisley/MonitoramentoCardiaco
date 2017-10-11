@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
+ * Controller to manage and verify the syntax from received message,
+ * to check if it is according to the established protocol
  * 
  * @author Lokisley Oliveira <lokisley at hotmail.com>
  */
@@ -37,6 +39,7 @@ public class MessageController {
     }
     
     /**
+     * Receives the initial message, and starts to process it
      * @param message
      * @param thread
      * @return
@@ -67,6 +70,8 @@ public class MessageController {
     }
     
     /**
+     * Refresh the patient data in the current list of connected patients
+     * 
      * @param message
      * @return true if the information of the pacient was successfully updated, false if it wasnt
      * @throws ProtocolSyntaxException
@@ -76,6 +81,8 @@ public class MessageController {
             throw new ProtocolSyntaxException();
         } else {
             message = message.substring(9);
+            
+            System.out.println("Patient to be added:" + message);
             
             int id = Integer.parseInt(message.substring(0, message.indexOf(",")));
             message = message.substring(message.indexOf(",") + 1);
@@ -96,6 +103,7 @@ public class MessageController {
                 throw new ProtocolSyntaxException();
             } else {
                 Patient patient = new Patient(id, bpm, nome, pressure, movement);
+                System.out.println("patient added" + controller.getPatientList().size());
                 return controller.addPatient(patient);
             }
         }
@@ -129,6 +137,7 @@ public class MessageController {
     }
     
     /**
+     * Check and realize the login in the server
      * 
      * @param message
      * @throws IOException
@@ -156,7 +165,7 @@ public class MessageController {
     }
     
     /**
-     * 
+     * Register a Doctor in the system;
      * @param message 
      * @return true if the user is successfully registered, false if some error has ocured  during the register
      * @throws LoginRegisteredException if the nickname of the login is already in use
@@ -176,12 +185,14 @@ public class MessageController {
     }
     
     /**
+     * Recevie the parameters and inserts the desired patient list from the Doctor
      * 
      * @param message
      * @throws AddPatientListException if a error has ocurred during the changing of the patient list to the doctor
      * @throws ProtocolSyntaxException if a erorr has ocurred in the syntax of the protocol
      */
     private boolean protocolUserlist(String message, MyThread thread) throws AddPatientListException, ProtocolSyntaxException, IOException{
+        //if the Doctor wants all the patient list
         if (message.startsWith("ALL")) {
             message = message.substring(message.indexOf(" ") + 1);
             String login = message.substring(message.indexOf(" "));
@@ -193,6 +204,7 @@ public class MessageController {
                 throw new ProtocolSyntaxException();
             }
         } else {
+        // if there's a specific selection
             message = message.substring(message.indexOf("<") + 1);
             
             ArrayList patientsId = new ArrayList();
@@ -206,6 +218,7 @@ public class MessageController {
             message = message.substring(message.indexOf(" ") + 1);
             
             if (message.equals("end")){
+                //return the data from the patients selected by the Doctor
                 ArrayList<Patient> patientList = controller.addPatientToDoctor(patientsId, login);
                 Iterator i = patientList.iterator();
                 String stringPatientList = "<";

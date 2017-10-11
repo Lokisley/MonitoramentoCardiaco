@@ -108,7 +108,7 @@ public class Controller {
     }
     
     /**
-     * 
+     * Verify if the login has the matching login and password to successfully log in the server
      * @param login the nickname of the user
      * @param password the password of the user
      * @return true if the user is in the list of the registered users, false if isnt

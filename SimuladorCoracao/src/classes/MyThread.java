@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * 
+ * Classe que realiza a comunicacao com o servidor, com os metodos de envio e recebimento de objetos
  * @author Lokisley Oliveira <lokisley at hotmail.com>
  */
 public class MyThread extends Thread{

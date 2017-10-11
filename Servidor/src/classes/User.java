@@ -7,7 +7,7 @@
 package classes;
 
 /**
- * 
+ * Save the information from the registered user
  * @author Lokisley Oliveira <lokisley at hotmail.com>
  */
 public class User {

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- *
+ * Cria a comunicação, criando thread e socket a ser utilizado para envio e recebimento de dado
  * @author Lokisley Oliveira <lokisley at hotmail.com>
  */
 public class Comunicacao {

@@ -6,6 +6,9 @@
 
 package classes;
 
+/**
+ * @author Lokisley Oliveira <lokisley at hotmail.com>
+ */
 public class Paciente {
     
     private String nome;

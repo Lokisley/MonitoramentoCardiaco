@@ -6,6 +6,10 @@
 
 package classes;
 
+/**
+ * Save the information from the connected patient
+ * @author Lokisley Oliveira <lokisley at hotmail.com>
+ */
 public class Patient {
     
     private int id;

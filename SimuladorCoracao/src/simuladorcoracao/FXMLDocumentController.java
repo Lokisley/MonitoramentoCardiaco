@@ -71,6 +71,10 @@ public class FXMLDocumentController implements Initializable {
         panelInformacao.setDisable(true);
     }
     
+    /**
+     * Captura os dados salvos na tela e os armazena num objeto Paciente
+     * @return um objeto Paciente com as informacoes inseridas, salvas
+     */
     public Paciente salvaDados() {
         String nome = textNome.getText();
         int id = Integer.parseInt(textId.getText());
@@ -82,6 +86,11 @@ public class FXMLDocumentController implements Initializable {
         return info;
     }
 
+    /**
+     * Realiza a primeira conexao entre o sensor e o servidor
+     * @param event
+     * @throws IOException 
+     */
     @FXML
     public void conectaServidor(ActionEvent event) throws IOException {
         String ip = textIp.getText();
@@ -93,6 +102,10 @@ public class FXMLDocumentController implements Initializable {
         panelInformacao.setDisable(false);
     }
     
+    /**
+     * Inicializa a transmissao dos dados do paciente para o servidor, e o realiza a cada 5 segundos
+     * @param event 
+     */
     @FXML
     public void iniciaEnvio(ActionEvent event){
         buttonEnvio.setVisible(false);
@@ -100,6 +113,9 @@ public class FXMLDocumentController implements Initializable {
         timer.schedule (new Transmissao(), 0, 5000);
     }
     
+    /**
+     * Classe de transmissao TimerTask para enviar as informacoes do paciente para o servidor
+     */
     private class Transmissao extends TimerTask{
         Paciente info;
 

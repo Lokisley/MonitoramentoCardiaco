@@ -17,6 +17,10 @@ public class Server {
     private ServerSocket server;
     private Controller controller = Controller.getInstance();
     
+    /**
+     * Initialize the server and keep the socket available to receive new connections
+     * @throws IOException 
+     */
     public Server () throws IOException {
         server = new ServerSocket(12345);
         ArrayList<MyThread> threadList = new ArrayList<MyThread>();

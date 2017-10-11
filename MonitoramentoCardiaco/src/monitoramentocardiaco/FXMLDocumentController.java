@@ -52,6 +52,10 @@ public class FXMLDocumentController implements Initializable {
         paneSelectedPatient.setVisible(false);
     }
     
+    /**
+     * Inicia a transmissao de dados
+     * @param event 
+     */
     @FXML
     public void iniciaEnvio(ActionEvent event){
         buttonInicio.setVisible(false);
@@ -59,6 +63,11 @@ public class FXMLDocumentController implements Initializable {
         timer.schedule (new Transmissao(), 0, 5000);
     }
     
+    /**
+     * Gera a conexão com o servidor
+     * @param event
+     * @throws IOException 
+     */
     @FXML
     public void conectaServidor(ActionEvent event) throws IOException {
         String ip = textIp.getText();
@@ -69,6 +78,9 @@ public class FXMLDocumentController implements Initializable {
         paneConexao.setDisable(true);
     }
     
+    /**
+     * Classe de transmissao TimerTask para enviar a solicitacao e receber a lista de pacientes do servidor
+     */
     private class Transmissao extends TimerTask{
 
         @Override
@@ -76,14 +88,24 @@ public class FXMLDocumentController implements Initializable {
             try {
                 comun.getThread().sendMessage("ioth monc ALL end");
                 String message = (String)comun.getThread().receiveMessage();
-                recebePacientes(message);
-                listPatient = new ListView<>(FXCollections.observableArrayList(listaPacientes));
+                
+                System.out.println("Message received from the server: " + message);
+                if (message.equals("ioth error syntax")){
+                    System.out.println("An error has occurreed during the message sending to the server");
+                } else {
+                    recebePacientes(message);
+                    listPatient = new ListView<>(FXCollections.observableArrayList(listaPacientes));
+                }
             } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
     
+    /**
+     * Salva uma lista de pacientes a partir do servidor
+     * @param message - a os dados dos pacientes
+     */
     private void recebePacientes (String message) {
         Paciente paciente;
         

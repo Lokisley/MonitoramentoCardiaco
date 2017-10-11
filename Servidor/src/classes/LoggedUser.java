@@ -9,7 +9,7 @@ package classes;
 import java.util.ArrayList;
 
 /**
- * 
+ * Lists current Logged Users, and saves its patient list to be monitored
  * @author Lokisley Oliveira <lokisley at hotmail.com>
  */
 public class LoggedUser extends User {
