@@ -123,13 +123,13 @@ public class MessageController {
      */
     private boolean protocolMonC(String message, MyThread thread) throws ClassNotFoundException, IOException, FileNotFoundException, LoginFailedException, LoginRegisteredException, AddPatientListException, ProtocolSyntaxException {
         if (message.startsWith("login ")) {
-            message = message.substring(0,6);
+            message = message.substring(6);
             return protocolLogin(message);
         } else if (message.startsWith("register ")) {
-            message = message.substring(0,9);
+            message = message.substring(9);
             return protocolRegis(message);
         } else if (message.startsWith("userlist ")){
-            message = message.substring(0, 9);
+            message = message.substring(9);
             return protocolUserlist(message, thread);
         } else {
             throw new ProtocolSyntaxException();
@@ -193,13 +193,13 @@ public class MessageController {
      */
     private boolean protocolUserlist(String message, MyThread thread) throws AddPatientListException, ProtocolSyntaxException, IOException{
         //if the Doctor wants all the patient list
+        ArrayList<Patient> patientList;
+        
         if (message.startsWith("ALL")) {
-            message = message.substring(message.indexOf(" ") + 1);
-            String login = message.substring(message.indexOf(" "));
             message = message.substring(message.indexOf(" ") + 1);
             
             if (message.equals("end")) {
-                controller.addPatientToDoctor(controller.getPatientList(), login);
+                patientList = controller.getPatientList();
             } else{
                 throw new ProtocolSyntaxException();
             }
@@ -219,25 +219,27 @@ public class MessageController {
             
             if (message.equals("end")){
                 //return the data from the patients selected by the Doctor
-                ArrayList<Patient> patientList = controller.addPatientToDoctor(patientsId, login);
-                Iterator i = patientList.iterator();
-                String stringPatientList = "<";
-                while (i.hasNext()){
-                    Patient p = (Patient)i.next();
-                    stringPatientList = stringPatientList.concat(
-                            "(" + p.getId() + 
-                            "," + p.getNome() +
-                            "," + p.getBpm() +
-                            "," + p.getPressao() +
-                            "," + p.isMovimento() + ")");
-                }
-                stringPatientList = stringPatientList.concat(">");
-                
-                thread.sendMessage("ioth userlist" + stringPatientList + " end");
+                patientList = controller.addPatientToDoctor(patientsId, login);
             } else {
                 throw new ProtocolSyntaxException();
             }
         }
-        throw new ProtocolSyntaxException();
+        
+        Iterator i = patientList.iterator();
+        String stringPatientList = "<";
+        while (i.hasNext()){
+            Patient p = (Patient)i.next();
+            stringPatientList = stringPatientList.concat(
+                    "(" + p.getId() + 
+                    "," + p.getNome() +
+                    "," + p.getBpm() +
+                    "," + p.getPressao() +
+                    "," + p.isMovimento() + ")");
+        }
+        stringPatientList = stringPatientList.concat(">");
+
+        thread.sendMessage("ioth userlist" + stringPatientList + " end");
+        
+        return true;
     }
 }

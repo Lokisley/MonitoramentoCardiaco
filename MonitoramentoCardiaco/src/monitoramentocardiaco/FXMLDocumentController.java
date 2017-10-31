@@ -86,7 +86,7 @@ public class FXMLDocumentController implements Initializable {
         @Override
         public void run() {
             try {
-                comun.getThread().sendMessage("ioth monc ALL end");
+                comun.getThread().sendMessage("ioth monc userlist ALL end");
                 String message = (String)comun.getThread().receiveMessage();
                 
                 System.out.println("Message received from the server: " + message);
@@ -112,19 +112,19 @@ public class FXMLDocumentController implements Initializable {
         message = message.substring(message.indexOf("<") + 1);
         while (!message.startsWith(">")){
             message = message.substring(message.indexOf("(") + 1);
-            int id = Integer.parseInt(message.substring(message.indexOf(",")));
+            int id = Integer.parseInt(message.substring(0, message.indexOf(",")));
             message = message.substring(message.indexOf(",") + 1);
             
-            String nome = message.substring(message.indexOf(","));
+            String nome = message.substring(0, message.indexOf(","));
             message = message.substring(message.indexOf(",") + 1);
             
-            int bpm = Integer.parseInt(message.substring(message.indexOf(",")));
+            int bpm = Integer.parseInt(message.substring(0, message.indexOf(",")));
             message = message.substring(message.indexOf(",") + 1);
             
-            String pressao = message.substring(message.indexOf(","));
+            String pressao = message.substring(0, message.indexOf(","));
             message = message.substring(message.indexOf(",") + 1);
             
-            boolean movimento = Boolean.parseBoolean(message.substring(message.indexOf(")")));
+            boolean movimento = Boolean.parseBoolean(message.substring(0, message.indexOf(")")));
             message = message.substring(message.indexOf(")") + 1);
             
             paciente = new Paciente(id, nome, bpm, pressao, movimento);
